@@ -6,7 +6,7 @@ use rltk::Algorithm2D;
 use rltk::BaseMap;
 use rltk::Point;
 use rltk::RandomNumberGenerator;
-use specs::rayon::vec;
+
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum TileType {
@@ -31,7 +31,7 @@ impl Algorithm2D for Map {
 
 impl BaseMap for Map {
     fn is_opaque(&self, idx: usize) -> bool {
-        self.tiles[idx as usize] == TileType::Wall
+        self.tiles[idx] == TileType::Wall
     }
 }
 
@@ -67,10 +67,11 @@ impl Map {
         }
     }
 }
-
+/*
 pub fn new_map_test() -> Vec<TileType> {
     todo!()
 }
+*/
 
 pub fn new_map_and_corridoors() -> Map {
     let mut map = Map {
@@ -88,7 +89,7 @@ pub fn new_map_and_corridoors() -> Map {
 
     let mut rng = RandomNumberGenerator::new();
 
-    for _ in 0..MAX_ROOMS {
+    for _i in 0..MAX_ROOMS {
         let w = rng.range(MIN_SIZE, MAX_SIZE);
         let h = rng.range(MIN_SIZE, MAX_SIZE);
         let x = rng.roll_dice(1, map.width - w - 1) - 1;

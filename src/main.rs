@@ -16,7 +16,7 @@ mod Components;
 use Components as GameComponents;
 mod Systems;
 use Systems as GameSystems;
-
+use crate::map::Map as GameMap;
 use crate::{
     GameComponents::context::{Player, Position, Renderable, State, Viewshed},
     Map::map::new_map_and_corridoors,
@@ -64,7 +64,9 @@ fn main() -> rltk::BError {
     gs.ecs.register::<Player>();
     gs.ecs.register::<Viewshed>();
 
-    gs.ecs.insert(new_map_and_corridoors());
+    let map: GameMap = new_map_and_corridoors();
+    let (player_x, player_y) = map.rooms[0].center();
+    gs.ecs.insert(map);
 
     gs.ecs
         .create_entity()
