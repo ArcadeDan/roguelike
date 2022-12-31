@@ -1,5 +1,5 @@
 use rltk::{field_of_view, Point};
-use specs::{Join, ReadExpect, System, WriteStorage, ReadStorage, WriteExpect, Entities};
+use specs::{Join, System, WriteStorage, ReadStorage, WriteExpect, Entities};
 
 use crate::{
     GameComponents::context::{Player, Position, Viewshed},

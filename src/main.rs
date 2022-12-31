@@ -1,17 +1,16 @@
-use std::cmp::{max, min};
+#![allow(unused_imports)]
 
-use rltk::{GameState, Rltk, VirtualKeyCode, RGB};
+use rltk::{RGB};
 use specs::{
-    Builder, Component, DenseVecStorage, Join, ReadStorage, RunNow, System, World, WorldExt,
-    WriteStorage,
+    Builder, World, WorldExt,
 };
 
 mod Rect;
 use Rect::rect;
 mod Map;
-use Map::{map::TileType, *};
+use Map::{*};
 mod NPC;
-use NPC::movement;
+
 mod Components;
 use Components as GameComponents;
 mod Systems;
