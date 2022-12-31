@@ -14,6 +14,8 @@ mod NPC;
 use NPC::movement;
 mod Components;
 use Components as GameComponents;
+mod Systems;
+use Systems as GameSystems;
 
 use crate::{
     GameComponents::context::{Player, Position, Renderable, State, Viewshed},
@@ -76,6 +78,7 @@ fn main() -> rltk::BError {
         .with(Viewshed {
             visible_tiles: Vec::new(),
             range: 8,
+            dirty: true
         })
         .build();
 

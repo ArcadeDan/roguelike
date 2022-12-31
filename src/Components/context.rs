@@ -1,7 +1,11 @@
-use rltk::{GameState, Rltk, RGB};
-use specs::{Component, DenseVecStorage, Join, ReadExpect, World, WorldExt};
+use rltk::{GameState, Point, Rltk, RGB};
+use specs::{Component, DenseVecStorage, Join, ReadExpect, RunNow, World, WorldExt};
 
-use crate::{Map::map::TileType, NPC::movement::player_input};
+use crate::{
+    GameSystems::visibility_system::VisibilitySystem,
+    Map::map::{Map, TileType},
+    NPC::movement::player_input,
+};
 
 #[derive(Component)]
 pub struct Position {
@@ -21,6 +25,45 @@ pub struct Player {}
 
 pub struct State {
     pub ecs: World,
+}
+
+pub fn draw_map(ecs: &World, ctx: &mut Rltk) {
+    let map = ecs.fetch::<Map>();
+
+    let mut y = 0;
+    let mut x = 0;
+    for (idx, tile) in map.tiles.iter().enumerate() {
+        // Render a tile depending upon the tile type
+        if map.revealed_tiles[idx] {
+            match tile {
+                TileType::Floor => {
+                    ctx.set(
+                        x,
+                        y,
+                        RGB::from_f32(0.5, 0.5, 0.5),
+                        RGB::from_f32(0., 0., 0.),
+                        rltk::to_cp437('.'),
+                    );
+                }
+                TileType::Wall => {
+                    ctx.set(
+                        x,
+                        y,
+                        RGB::from_f32(0.0, 1.0, 0.0),
+                        RGB::from_f32(0., 0., 0.),
+                        rltk::to_cp437('#'),
+                    );
+                }
+            }
+        }
+
+        // Move the coordinates
+        x += 1;
+        if x > 79 {
+            x = 0;
+            y += 1;
+        }
+    }
 }
 
 impl GameState for State {
@@ -44,6 +87,8 @@ impl GameState for State {
 
 impl State {
     pub fn run_systems(&mut self) {
+        let mut vis = VisibilitySystem {};
+        vis.run_now(&self.ecs);
         self.ecs.maintain();
     }
 }
@@ -52,4 +97,5 @@ impl State {
 pub struct Viewshed {
     pub visible_tiles: Vec<rltk::Point>,
     pub range: i32,
+    pub dirty: bool,
 }

@@ -2,7 +2,11 @@ use crate::rect::Rect;
 
 use core::cmp::max;
 use core::cmp::min;
+use rltk::Algorithm2D;
+use rltk::BaseMap;
+use rltk::Point;
 use rltk::RandomNumberGenerator;
+use specs::rayon::vec;
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum TileType {
@@ -15,6 +19,19 @@ pub struct Map {
     pub rooms: Vec<Rect>,
     pub width: i32,
     pub height: i32,
+    pub revealed_tiles: Vec<bool>,
+}
+
+impl Algorithm2D for Map {
+    fn dimensions(&self) -> rltk::Point {
+        Point::new(self.width, self.height)
+    }
+}
+
+impl BaseMap for Map {
+    fn is_opaque(&self, idx: usize) -> bool {
+        self.tiles[idx as usize] == TileType::Wall
+    }
 }
 
 impl Map {
@@ -60,6 +77,7 @@ pub fn new_map_and_corridoors() -> Map {
         rooms: Vec::new(),
         width: 80,
         height: 50,
+        revealed_tiles: vec![false; 80 * 50],
     };
 
     const MAX_ROOMS: i32 = 30;
