@@ -13,13 +13,14 @@ pub enum TileType {
     Wall,
     Floor,
 }
-
+#[derive(Default)]
 pub struct Map {
     pub tiles: Vec<TileType>,
     pub rooms: Vec<Rect>,
     pub width: i32,
     pub height: i32,
     pub revealed_tiles: Vec<bool>,
+    pub visible_tiles: Vec<bool>,
 }
 
 impl Algorithm2D for Map {
@@ -78,6 +79,7 @@ pub fn new_map_and_corridoors() -> Map {
         width: 80,
         height: 50,
         revealed_tiles: vec![false; 80 * 50],
+        visible_tiles: vec![false; 80 * 50],
     };
 
     const MAX_ROOMS: i32 = 30;
