@@ -16,7 +16,7 @@ mod Components;
 use Components as GameComponents;
 
 use crate::{
-    GameComponents::context::{Player, Position, Renderable, State},
+    GameComponents::context::{Player, Position, Renderable, State, Viewshed},
     Map::map::new_map_and_corridoors,
 };
 
@@ -60,6 +60,7 @@ fn main() -> rltk::BError {
     gs.ecs.register::<Position>();
     gs.ecs.register::<Renderable>();
     gs.ecs.register::<Player>();
+    gs.ecs.register::<Viewshed>();
 
     gs.ecs.insert(new_map_and_corridoors());
 
@@ -72,6 +73,10 @@ fn main() -> rltk::BError {
             bg: RGB::named(rltk::BLACK),
         })
         .with(Player {})
+        .with(Viewshed {
+            visible_tiles: Vec::new(),
+            range: 8,
+        })
         .build();
 
     rltk::main_loop(context, gs)
