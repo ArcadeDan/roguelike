@@ -1,5 +1,5 @@
 use rltk::{field_of_view, Point};
-use specs::{Join, System, WriteStorage, ReadStorage, WriteExpect, Entities};
+use specs::{Entities, Join, ReadStorage, System, WriteExpect, WriteStorage};
 
 use crate::{
     GameComponents::context::{Player, Position, Viewshed},
@@ -30,7 +30,6 @@ impl<'a> System<'a> for VisibilitySystem {
                     .visible_tiles
                     .retain(|p| p.x >= 0 && p.x < map.width && p.y >= 0 && p.y < map.height);
 
-             
                 let _p: Option<&Player> = player.get(ent);
                 if let Some(_p) = _p {
                     for t in map.visible_tiles.iter_mut() {

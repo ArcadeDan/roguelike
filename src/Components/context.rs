@@ -41,14 +41,15 @@ pub fn draw_map(ecs: &World, ctx: &mut Rltk) {
                 TileType::Floor => {
                     glyph = rltk::to_cp437('.');
                     fg = RGB::from_f32(0.0, 0.5, 0.5);
-                
                 }
                 TileType::Wall => {
                     glyph = rltk::to_cp437('#');
                     fg = RGB::from_f32(0., 1.0, 0.);
                 }
             }
-            if !map.visible_tiles[idx] { fg = fg.to_greyscale() }
+            if !map.visible_tiles[idx] {
+                fg = fg.to_greyscale()
+            }
             ctx.set(x, y, fg, RGB::from_f32(0.0, 0.0, 0.0), glyph);
         }
 

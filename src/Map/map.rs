@@ -7,7 +7,6 @@ use rltk::BaseMap;
 use rltk::Point;
 use rltk::RandomNumberGenerator;
 
-
 #[derive(PartialEq, Copy, Clone)]
 pub enum TileType {
     Wall,

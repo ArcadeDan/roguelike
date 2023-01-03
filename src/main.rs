@@ -1,31 +1,32 @@
 #![allow(unused_imports)]
 
-use rltk::{RGB};
-use specs::{
-    Builder, World, WorldExt,
-};
-
+use rltk::RGB;
+use specs::{Builder, World, WorldExt};
+#[allow(non_snake_case)]
 mod Rect;
 use Rect::rect;
+#[allow(non_snake_case)]
 mod Map;
-use Map::{*};
-mod NPC;
-
+use Map::*;
+#[allow(non_snake_case)]
 mod Components;
+#[allow(non_snake_case)]
+mod NPC;
 use Components as GameComponents;
+#[allow(non_snake_case)]
 mod Systems;
-use Systems as GameSystems;
 use crate::map::Map as GameMap;
 use crate::{
     GameComponents::context::{Player, Position, Renderable, State, Viewshed},
     Map::map::new_map_and_corridoors,
 };
-
+use Systems as GameSystems;
 
 fn main() -> rltk::BError {
     use rltk::RltkBuilder;
     let context = RltkBuilder::simple80x50()
-        .with_title("Roguelike Tutorial")
+        .with_title("Rogue")
+        .with_fullscreen(true)
         .build()?;
     let mut gs = State { ecs: World::new() };
     gs.ecs.register::<Position>();
@@ -39,7 +40,10 @@ fn main() -> rltk::BError {
 
     gs.ecs
         .create_entity()
-        .with(Position { x: player_x, y: player_y })
+        .with(Position {
+            x: player_x,
+            y: player_y,
+        })
         .with(Renderable {
             glyph: rltk::to_cp437('@'),
             fg: RGB::named(rltk::YELLOW),
