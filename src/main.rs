@@ -37,13 +37,22 @@ fn main() -> rltk::BError {
     let map: GameMap = new_map_and_corridoors();
     let (player_x, player_y) = map.rooms[0].center();
 
+    let mut rng = rltk::RandomNumberGenerator::new();
     for room in map.rooms.iter().skip(1) {
         let (x, y) = room.center();
+        let rand_glyph: rltk::FontCharType;
+        let roll = rng.roll_dice(1, 2);
+
+        match roll {
+            1 => {rand_glyph = rltk::to_cp437('b')}
+            _ => {rand_glyph = rltk::to_cp437('g')}
+        }
+
         gs.ecs
             .create_entity()
             .with(Position { x, y })
             .with(Renderable {
-                glyph: rltk::to_cp437('b'),
+                glyph: rand_glyph,
                 fg: RGB::named(rltk::RED),
                 bg: RGB::named(rltk::BLACK),
             })
