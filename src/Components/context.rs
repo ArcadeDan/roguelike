@@ -119,7 +119,7 @@ impl State {
 }
 
 // fov on entity
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct Viewshed {
     pub visible_tiles: Vec<rltk::Point>,
     pub range: i32,
