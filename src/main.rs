@@ -1,6 +1,6 @@
 #![allow(unused_imports)]
 
-use rltk::RGB;
+use rltk::{Point, RGB};
 use specs::{Builder, World, WorldExt};
 #[allow(non_snake_case)]
 mod Rect;
@@ -29,7 +29,10 @@ fn main() -> rltk::BError {
         .with_title("Rogue")
         .with_fullscreen(true)
         .build()?;
-    let mut gs = State { ecs: World::new() };
+    let mut gs = State {
+        ecs: World::new(),
+        runstate: GameComponents::context::RunState::Running,
+    };
     gs.ecs.register::<Position>();
     gs.ecs.register::<Renderable>();
     gs.ecs.register::<Player>();
@@ -68,6 +71,7 @@ fn main() -> rltk::BError {
     }
 
     gs.ecs.insert(map);
+    gs.ecs.insert(Point::new(player_x, player_y));
 
     gs.ecs
         .create_entity()

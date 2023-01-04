@@ -22,9 +22,15 @@ pub struct Renderable {
 
 #[derive(Component, Debug)]
 pub struct Player {}
+#[derive(PartialEq, Debug, Clone)]
+pub enum RunState {
+    Paused,
+    Running,
+}
 
 pub struct State {
     pub ecs: World,
+    pub runstate: RunState,
 }
 
 pub fn draw_map(ecs: &World, ctx: &mut Rltk) {
@@ -69,9 +75,15 @@ impl GameState for State {
     fn tick(&mut self, ctx: &mut Rltk) {
         ctx.cls();
 
-        player_input(self, ctx);
-        self.run_systems();
+        //player_input(self, ctx);
+        //self.run_systems();
 
+        if self.runstate == RunState::Running {
+            self.run_systems();
+            self.runstate = RunState::Paused;
+        } else {
+            self.runstate = player_input(self, ctx);
+        }
         draw_map(&self.ecs, ctx);
 
         let positions = self.ecs.read_storage::<Position>();
