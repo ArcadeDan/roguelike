@@ -15,6 +15,7 @@ mod NPC;
 use Components as GameComponents;
 #[allow(non_snake_case)]
 mod Systems;
+use crate::GameComponents::context::Name;
 use crate::map::Map as GameMap;
 use crate::NPC::enemy::Monster;
 use crate::{
@@ -38,19 +39,21 @@ fn main() -> rltk::BError {
     gs.ecs.register::<Player>();
     gs.ecs.register::<Viewshed>();
     gs.ecs.register::<Monster>();
+    gs.ecs.register::<Name>();
 
     let map: GameMap = new_map_and_corridoors();
     let (player_x, player_y) = map.rooms[0].center();
 
     let mut rng = rltk::RandomNumberGenerator::new();
-    for room in map.rooms.iter().skip(1) {
+    for (i, room) in map.rooms.iter().skip(1).enumerate() {
         let (x, y) = room.center();
+        let name: String;
         let rand_glyph: rltk::FontCharType;
         let roll = rng.roll_dice(1, 2);
 
         match roll {
-            1 => rand_glyph = rltk::to_cp437('b'),
-            _ => rand_glyph = rltk::to_cp437('g'),
+            1 => { rand_glyph = rltk::to_cp437('b'); name = "Bandit".to_string(); }
+            _ => { rand_glyph = rltk::to_cp437('g'); name = "Goblin".to_string(); }
         }
 
         gs.ecs
@@ -67,6 +70,7 @@ fn main() -> rltk::BError {
                 dirty: true,
             })
             .with(Monster {})
+            .with(Name {name: format!("{} #{}", &name, i)})
             .build();
     }
 
@@ -90,6 +94,7 @@ fn main() -> rltk::BError {
             range: 8,
             dirty: true,
         })
+        .with(Name {name: "Player".to_string()})
         .build();
 
     rltk::main_loop(context, gs)

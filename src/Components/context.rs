@@ -33,6 +33,12 @@ pub struct State {
     pub runstate: RunState,
 }
 
+
+#[derive(Component, Debug)]
+pub struct Name {
+    pub name: String
+}
+
 pub fn draw_map(ecs: &World, ctx: &mut Rltk) {
     let map = ecs.fetch::<Map>();
 
