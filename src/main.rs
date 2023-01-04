@@ -16,7 +16,7 @@ use Components as GameComponents;
 #[allow(non_snake_case)]
 mod Systems;
 use crate::map::Map as GameMap;
-use crate::GameComponents::context::Name;
+use crate::GameComponents::context::{Name, BlocksTile};
 use crate::NPC::enemy::Monster;
 use crate::{
     GameComponents::context::{Player, Position, Renderable, State, Viewshed},
@@ -42,6 +42,7 @@ fn main() -> rltk::BError {
     gs.ecs.register::<Viewshed>();
     gs.ecs.register::<Monster>();
     gs.ecs.register::<Name>();
+    gs.ecs.register::<BlocksTile>();
 
     let map: GameMap = new_map_and_corridoors();
     let (player_x, player_y) = map.rooms[0].center();
@@ -83,6 +84,7 @@ fn main() -> rltk::BError {
             .with(Name {
                 name: format!("{} #{}", &name, i),
             })
+            .with(BlocksTile {})
             .build();
     }
 
