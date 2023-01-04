@@ -2,7 +2,7 @@ use rltk::{console, Point};
 use specs::{Join, ReadExpect, ReadStorage, System};
 
 use crate::{
-    GameComponents::context::{Position, Viewshed, Name},
+    GameComponents::context::{Name, Position, Viewshed},
     NPC::enemy::Monster,
 };
 

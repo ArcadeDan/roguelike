@@ -33,12 +33,14 @@ pub struct State {
     pub runstate: RunState,
 }
 
-
 #[derive(Component, Debug)]
 pub struct Name {
-    pub name: String
+    pub name: String,
 }
 
+/**
+ *  map geography to screen render
+ */
 pub fn draw_map(ecs: &World, ctx: &mut Rltk) {
     let map = ecs.fetch::<Map>();
 
@@ -76,7 +78,7 @@ pub fn draw_map(ecs: &World, ctx: &mut Rltk) {
 
 impl GameState for State {
     ///
-    /// Render loop
+    /// Game Render loop
     ///
     fn tick(&mut self, ctx: &mut Rltk) {
         ctx.cls();
@@ -105,6 +107,7 @@ impl GameState for State {
     }
 }
 
+/// impl additional render loop information
 impl State {
     pub fn run_systems(&mut self) {
         let mut vis = VisibilitySystem {};
@@ -115,6 +118,7 @@ impl State {
     }
 }
 
+// fov on entity
 #[derive(Component)]
 pub struct Viewshed {
     pub visible_tiles: Vec<rltk::Point>,

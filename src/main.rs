@@ -15,8 +15,8 @@ mod NPC;
 use Components as GameComponents;
 #[allow(non_snake_case)]
 mod Systems;
-use crate::GameComponents::context::Name;
 use crate::map::Map as GameMap;
+use crate::GameComponents::context::Name;
 use crate::NPC::enemy::Monster;
 use crate::{
     GameComponents::context::{Player, Position, Renderable, State, Viewshed},
@@ -30,6 +30,8 @@ fn main() -> rltk::BError {
         .with_title("Rogue")
         .with_fullscreen(true)
         .build()?;
+
+    // gamestate init
     let mut gs = State {
         ecs: World::new(),
         runstate: GameComponents::context::RunState::Running,
@@ -44,6 +46,8 @@ fn main() -> rltk::BError {
     let map: GameMap = new_map_and_corridoors();
     let (player_x, player_y) = map.rooms[0].center();
 
+    // room generation block
+    // begin
     let mut rng = rltk::RandomNumberGenerator::new();
     for (i, room) in map.rooms.iter().skip(1).enumerate() {
         let (x, y) = room.center();
@@ -52,8 +56,14 @@ fn main() -> rltk::BError {
         let roll = rng.roll_dice(1, 2);
 
         match roll {
-            1 => { rand_glyph = rltk::to_cp437('b'); name = "Bandit".to_string(); }
-            _ => { rand_glyph = rltk::to_cp437('g'); name = "Goblin".to_string(); }
+            1 => {
+                rand_glyph = rltk::to_cp437('b');
+                name = "Bandit".to_string();
+            }
+            _ => {
+                rand_glyph = rltk::to_cp437('g');
+                name = "Goblin".to_string();
+            }
         }
 
         gs.ecs
@@ -70,13 +80,18 @@ fn main() -> rltk::BError {
                 dirty: true,
             })
             .with(Monster {})
-            .with(Name {name: format!("{} #{}", &name, i)})
+            .with(Name {
+                name: format!("{} #{}", &name, i),
+            })
             .build();
     }
 
     gs.ecs.insert(map);
     gs.ecs.insert(Point::new(player_x, player_y));
+    // room generation block
+    // end
 
+    //entities
     gs.ecs
         .create_entity()
         .with(Position {
@@ -94,7 +109,9 @@ fn main() -> rltk::BError {
             range: 8,
             dirty: true,
         })
-        .with(Name {name: "Player".to_string()})
+        .with(Name {
+            name: "Player".to_string(),
+        })
         .build();
 
     rltk::main_loop(context, gs)
