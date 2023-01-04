@@ -2,7 +2,7 @@ use rltk::{GameState, Rltk, RGB};
 use specs::{Component, DenseVecStorage, Join, RunNow, World, WorldExt};
 
 use crate::{
-    GameSystems::visibility_system::VisibilitySystem,
+    GameSystems::{monster_ai_system::MonsterAI, visibility_system::VisibilitySystem},
     Map::map::{Map, TileType},
     NPC::movement::player_input,
 };
@@ -65,7 +65,7 @@ pub fn draw_map(ecs: &World, ctx: &mut Rltk) {
 impl GameState for State {
     ///
     /// Render loop
-    /// 
+    ///
     fn tick(&mut self, ctx: &mut Rltk) {
         ctx.cls();
 
@@ -80,7 +80,9 @@ impl GameState for State {
 
         for (pos, render) in (&positions, &renderables).join() {
             let idx = map.xy_idx(pos.x, pos.y);
-            if map.visible_tiles[idx] {ctx.set(pos.x, pos.y, render.fg, render.bg, render.glyph)};
+            if map.visible_tiles[idx] {
+                ctx.set(pos.x, pos.y, render.fg, render.bg, render.glyph)
+            };
         }
     }
 }
@@ -89,6 +91,8 @@ impl State {
     pub fn run_systems(&mut self) {
         let mut vis = VisibilitySystem {};
         vis.run_now(&self.ecs);
+        let mut mob = MonsterAI {};
+        mob.run_now(&self.ecs);
         self.ecs.maintain();
     }
 }

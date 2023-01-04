@@ -16,6 +16,7 @@ use Components as GameComponents;
 #[allow(non_snake_case)]
 mod Systems;
 use crate::map::Map as GameMap;
+use crate::NPC::enemy::Monster;
 use crate::{
     GameComponents::context::{Player, Position, Renderable, State, Viewshed},
     Map::map::new_map_and_corridoors,
@@ -33,6 +34,7 @@ fn main() -> rltk::BError {
     gs.ecs.register::<Renderable>();
     gs.ecs.register::<Player>();
     gs.ecs.register::<Viewshed>();
+    gs.ecs.register::<Monster>();
 
     let map: GameMap = new_map_and_corridoors();
     let (player_x, player_y) = map.rooms[0].center();
@@ -44,8 +46,8 @@ fn main() -> rltk::BError {
         let roll = rng.roll_dice(1, 2);
 
         match roll {
-            1 => {rand_glyph = rltk::to_cp437('b')}
-            _ => {rand_glyph = rltk::to_cp437('g')}
+            1 => rand_glyph = rltk::to_cp437('b'),
+            _ => rand_glyph = rltk::to_cp437('g'),
         }
 
         gs.ecs
@@ -61,6 +63,7 @@ fn main() -> rltk::BError {
                 range: 8,
                 dirty: true,
             })
+            .with(Monster {})
             .build();
     }
 
