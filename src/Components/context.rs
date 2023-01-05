@@ -2,7 +2,7 @@ use rltk::{GameState, Rltk, RGB};
 use specs::{Component, DenseVecStorage, Join, RunNow, World, WorldExt};
 
 use crate::{
-    GameSystems::{monster_ai_system::MonsterAI, visibility_system::VisibilitySystem},
+    GameSystems::{monster_ai_system::MonsterAI, visibility_system::VisibilitySystem, map_indexing_system::MapIndexSystem},
     Map::map::{Map, TileType},
     NPC::movement::player_input,
 };
@@ -114,6 +114,8 @@ impl State {
         vis.run_now(&self.ecs);
         let mut mob = MonsterAI {};
         mob.run_now(&self.ecs);
+        let mut mapindex = MapIndexSystem{};
+        mapindex.run_now(&self.ecs);
         self.ecs.maintain();
     }
 }
